@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{meta.title}}</title>
+    <meta name="description" content="{{meta.description}}">
+    <meta name="keywords" content="{{meta.keywords}}">
+    <meta name="author" content="{{meta.author}}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{meta.title}}">
+    <meta property="og:description" content="{{meta.description}}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="{{meta.title}}">
+    <meta property="twitter:description" content="{{meta.description}}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>">
+    
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-card: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --text-tertiary: #515154;
+            --border-color: rgba(0, 0, 0, 0.04);
+            --shadow-light: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --accent-color: #ff6b35;
+            --accent-hover: #ff5722;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #000000;
+            --bg-secondary: #1c1c1e;
+            --bg-card: #1c1c1e;
+            --text-primary: #ffffff;
+            --text-secondary: #98989d;
+            --text-tertiary: #8e8e93;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-light: 0 2px 12px rgba(0, 0, 0, 0.3);
+            --accent-color: #ff6b35;
+            --accent-hover: #ff5722;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        [data-theme="dark"] .header {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+        
+        .logo {
+            font-size: 21px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.022em;
+        }
+        
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .dark-mode-toggle:hover {
+            background: var(--bg-secondary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 60px 0;
+            text-align: center;
+            background: var(--bg-secondary);
+            margin: 0;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: -0.005em;
+            line-height: 1.07;
+        }
+        
+        .hero .subtitle {
+            font-size: 28px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-weight: 400;
+            letter-spacing: 0.004em;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 980px;
+            font-weight: 400;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            letter-spacing: -0.022em;
+            min-width: 28px;
+        }
+        
+        .cta-button:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+        
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+        
+        .copy-code {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 20px auto;
+            max-width: 280px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-code:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.3);
+        }
+        
+        .copy-code code {
+            font-family: SF Mono, Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+            font-size: 17px;
+            color: var(--text-primary);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Section styling */
+        .section {
+            padding: 60px 0;
+            background: var(--bg-primary);
+        }
+        
+        .section.gray {
+            background: var(--bg-secondary);
+        }
+        
+        .section h2 {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 50px;
+            color: var(--text-primary);
+            letter-spacing: -0.003em;
+        }
+        
+        /* Benefits Section */
+        .benefits-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .benefits-header h2 {
+            margin-bottom: 16px;
+        }
+        
+        .benefits-header p {
+            font-size: 21px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .benefit-card {
+            background: var(--bg-card);
+            padding: 40px 30px;
+            border-radius: 18px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-light);
+        }
+        
+        .benefit-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+            letter-spacing: -0.022em;
+        }
+        
+        .benefit-card .highlight {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 12px 0;
+            color: var(--accent-color);
+            letter-spacing: -0.003em;
+        }
+        
+        .benefit-card p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            font-weight: 400;
+        }
+        
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 18px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            box-shadow: var(--shadow-light);
+            transform: translateY(-2px);
+        }
+        
+        .feature-card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+            letter-spacing: -0.022em;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        
+        /* FAQ Section - New Modern Style */
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: var(--bg-card);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-color: #e0e0e0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        [data-theme="dark"] .faq-item:hover {
+            border-color: #333333;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .faq-question {
+            padding: 30px 35px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            letter-spacing: -0.022em;
+            line-height: 1.4;
+            transition: all 0.2s ease;
+        }
+        
+        .faq-question:hover {
+            color: #333333;
+        }
+        
+        [data-theme="dark"] .faq-question:hover {
+            color: #ffffff;
+        }
+        
+        .faq-question::after {
+            content: '▼';
+            font-size: 16px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 50px;
+        }
+        
+        .faq-question.active::after {
+            transform: rotate(180deg);
+            color: var(--accent-color);
+        }
+        
+        .faq-question.active {
+            border-bottom: none;
+        }
+        
+        .faq-answer {
+            padding: 0 35px 35px;
+            color: var(--text-tertiary);
+            font-size: 16px;
+            line-height: 1.7;
+            font-weight: 400;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+            margin-top: 20px;
+        }
+        
+        .faq-answer.active {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 25px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.8;
+        }
+        
+        .footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1068px) {
+            .container {
+                padding: 0 22px;
+            }
+        }
+        
+        @media (max-width: 734px) {
+            .hero h1 {
+                font-size: 32px;
+                line-height: 1.125;
+            }
+            
+            .hero .subtitle {
+                font-size: 19px;
+            }
+            
+            .section h2 {
+                font-size: 32px;
+            }
+            
+            .benefits-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .benefit-card,
+            .feature-card {
+                padding: 30px 24px;
+            }
+            
+            .container {
+                padding: 0 16px;
+            }
+            
+            .faq-question {
+                padding: 25px 20px;
+                font-size: 16px;
+            }
+            
+            .faq-answer {
+                padding: 0 20px 25px;
+            }
+            
+            .header-content {
+                padding: 12px 0;
+            }
+        }
+        
+        /* Tablet specific */
+        @media (min-width: 735px) and (max-width: 1068px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+            
+            .hero .subtitle {
+                font-size: 24px;
+            }
+            
+            .section h2 {
+                font-size: 40px;
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus states for accessibility */
+        .cta-button:focus,
+        .copy-code:focus,
+        .faq-question:focus,
+        .dark-mode-toggle:focus {
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+        
+        /* Smooth scroll for better UX */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">WHOOP Referral</a>
+                <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+                    🌙 Dark
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>{{personal.message}}</h1>
+                <p class="subtitle">Use my referral link</p>
+                <a href="{{referralLink}}" class="cta-button" onclick="trackClick('hero-cta')">
+                    Get WHOOP
+                </a>
+                <div class="copy-code" onclick="copyCode()" title="Click to copy referral code">
+                    <p>Referral code: <code>{{referralCode}}</code></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="section">
+            <div class="container">
+                <div class="benefits-header">
+                    <h2>How We Both Win</h2>
+                    <p>Here's exactly what happens when you use my referral link</p>
+                </div>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <h3>✅ What You Get</h3>
+                        <div class="highlight">Free device</div>
+                        <p>WHOOP 4.0 (worth $239)</p>
+                        <div class="highlight">$30 off</div>
+                        <p>Your membership</p>
+                        <div class="highlight">30 days free</div>
+                        <p>Try it risk-free</p>
+                    </div>
+                    <div class="benefit-card">
+                        <h3>🤝 What I Get</h3>
+                        <div class="highlight">1 free month</div>
+                        <p>When you complete your trial</p>
+                        <br>
+                        <p style="font-style: italic; color: var(--accent-color);">Everyone wins!</p>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <a href="{{referralLink}}" class="cta-button" onclick="trackClick('benefits-cta')">
+                        Get started
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section gray">
+            <div class="container">
+                <h2>Why WHOOP?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>24/7 Health Monitoring</h3>
+                        <p>Track heart rate, sleep, strain, and recovery continuously without ever taking it off</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Personalized Recovery Insights</h3>
+                        <p>Get daily recovery scores (0-100%) based on HRV, sleep quality, and resting heart rate</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Sleep Optimization</h3>
+                        <p>Track all 4 sleep stages with lab-level accuracy and get personalized sleep recommendations</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Strain Coaching</h3>
+                        <p>Optimize training intensity with strain scores (0-21) based on your recovery status</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Stress Monitoring</h3>
+                        <p>Real-time stress tracking with guided breathwork exercises for relaxation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>No Distractions</h3>
+                        <p>Screen-free design means no notifications, calls, or distractions - just pure data</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section">
+            <div class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            How does this referral work?
+                        </button>
+                        <div class="faq-answer">
+                            When you sign up using my referral link, you get a free WHOOP 4.0 device (worth $239) + $30 off your membership + a 30-day free trial. I get a free month once you complete your trial period. It's a win-win!
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            What exactly do I get with the free trial?
+                        </button>
+                        <div class="faq-answer">
+                            You get a new or expertly inspected pre-owned WHOOP 4.0 device, wireless battery pack, brand new SuperKnit band, and full access to all Peak membership features for 30 days. Everything is backed by WHOOP's lifetime warranty.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            How much does WHOOP cost after the trial?
+                        </button>
+                        <div class="faq-answer">
+                            After your free trial, you'll automatically continue with a 12-month Peak membership. Current pricing: $30/month (monthly), $239/year (12-month), or $399 for 24 months. The longer you commit, the lower the monthly cost.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            Can I cancel during the trial?
+                        </button>
+                        <div class="faq-answer">
+                            Absolutely! You can cancel anytime during your 30-day trial with no charges. You'll need to return the device and battery pack (WHOOP provides the shipping label), but you keep the band. You only pay return shipping costs.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            What makes WHOOP different from other fitness trackers?
+                        </button>
+                        <div class="faq-answer">
+                            WHOOP has no screen or distractions - it's purely focused on health data. It tracks 24/7 with 5 LEDs and 4 photodiodes for medical-grade accuracy. Unlike step counters, it measures strain, recovery, and sleep optimization with personalized coaching.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            Do I need to take it off to charge?
+                        </button>
+                        <div class="faq-answer">
+                            Nope! WHOOP's wireless battery pack charges your device while you wear it. Battery lasts 4-5 days, and the wireless charging takes about an hour. You never miss data collection.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            What is strain and recovery?
+                        </button>
+                        <div class="faq-answer">
+                            Strain (0-21 scale) measures your daily exertion from workouts, stress, and activities. Recovery (0-100%) tells you how ready your body is for strain based on sleep quality, HRV, and resting heart rate. WHOOP helps you balance both.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            Is this legitimate or some kind of scam?
+                        </button>
+                        <div class="faq-answer">
+                            This is 100% legitimate! It's WHOOP's official referral program. You're getting the same deal as going directly to WHOOP, plus the bonus $30 off. WHOOP is used by professional athletes and has backing from major investors.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            What happens if my device breaks?
+                        </button>
+                        <div class="faq-answer">
+                            All WHOOP devices come with a lifetime warranty. If you have any issues, their 24/7 support team will replace your device hassle-free as long as you have an active membership.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            Who should use WHOOP?
+                        </button>
+                        <div class="faq-answer">
+                            WHOOP is perfect for athletes, fitness enthusiasts, biohackers, and anyone serious about optimizing their health. If you want detailed insights into sleep, recovery, and training optimization, WHOOP is ideal. If you just want basic step counting, a simpler tracker might be better.
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 50px;">
+                    <a href="{{referralLink}}" class="cta-button" onclick="trackClick('faq-cta')">
+                        Start your free trial
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>
+                This is a referral link for WHOOP's official program.<br>
+                <a href="https://www.whoop.com" target="_blank">Learn more about WHOOP</a>
+            </p>
+            <p style="margin-top: 12px;">
+                <strong>FTC Disclosure:</strong> When you sign up through this link, I may receive a free month at no extra cost to you.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode functionality
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update button text
+            const button = document.querySelector('.dark-mode-toggle');
+            button.textContent = newTheme === 'dark' ? '☀️ Light' : '🌙 Dark';
+        }
+        
+        // Initialize theme on page load
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            // Update button text
+            const button = document.querySelector('.dark-mode-toggle');
+            button.textContent = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+        }
+        
+        // Copy referral code functionality
+        function copyCode() {
+            const code = '{{referralCode}}';
+            navigator.clipboard.writeText(code).then(() => {
+                const copyElement = document.querySelector('.copy-code');
+                const originalHTML = copyElement.innerHTML;
+                copyElement.innerHTML = '<p style="color: var(--accent-color); font-weight: 600;">✓ Copied</p>';
+                setTimeout(() => {
+                    copyElement.innerHTML = originalHTML;
+                }, 1500);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const copyElement = document.querySelector('.copy-code');
+                const originalHTML = copyElement.innerHTML;
+                copyElement.innerHTML = '<p style="color: var(--accent-color); font-weight: 600;">✓ Copied</p>';
+                setTimeout(() => {
+                    copyElement.innerHTML = originalHTML;
+                }, 1500);
+            });
+        }
+
+        // FAQ toggle functionality
+        function toggleFAQ(button) {
+            const answer = button.nextElementSibling;
+            const isActive = button.classList.contains('active');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.classList.remove('active');
+                q.nextElementSibling.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                button.classList.add('active');
+                answer.classList.add('active');
+            }
+        }
+
+        // Simple click tracking
+        function trackClick(source) {
+            console.log('Click tracked:', source);
+            // Add analytics here if needed
+        }
+        
+        // Initialize theme when page loads
+        document.addEventListener('DOMContentLoaded', initTheme);
+    </script>
+</body>
+</html>

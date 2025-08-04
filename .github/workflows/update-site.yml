@@ -1,0 +1,115 @@
+name: Update WHOOP Referral Site
+
+on:
+  push:
+    paths:
+      - 'data/referral.js'
+      - 'templates/template.html'
+      - 'scripts/update-site.js'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm ci || npm install
+
+      - name: Generate WHOOP referral site
+        run: node scripts/update-site.js
+        env:
+          TEMPLATE_PATH: ${{ github.workspace }}/templates/template.html
+
+      - name: Generate README
+        run: |
+          cat > README.md << 'EOF'
+          # 🏃 WHOOP Referral - Get Free WHOOP 4.0 + $30 Off
+
+          ![WHOOP Referral](https://img.shields.io/badge/WHOOP-Referral%20Link-orange?style=for-the-badge)
+          ![Updated](https://img.shields.io/badge/Updated-$(date +%Y--%m--%d)-green?style=for-the-badge)
+
+          ## 🎁 What You Get
+
+          - **FREE WHOOP 4.0 Device** (worth $239)
+          - **$30 OFF** your membership
+          - **1 Month FREE** trial
+          - **Free shipping** included
+
+          ## 🔗 Get Started
+
+          **[👉 Click here to get your free WHOOP →](https://join.whoop.com/776C97)**
+
+          Or use referral code: `776C97`
+
+          ## 🤝 How It Works
+
+          1. Click the referral link above
+          2. Sign up for WHOOP 
+          3. Get your free device shipped to you
+          4. Start your free month trial
+          5. I get a free month when you complete your trial
+
+          ## 💪 Why WHOOP?
+
+          WHOOP is the most advanced fitness and health wearable that provides:
+
+          - **24/7 Health Monitoring** - Track heart rate, sleep, strain, and recovery
+          - **Personalized Insights** - Daily recommendations based on your data  
+          - **Sleep Optimization** - Understand and improve your sleep cycles
+          - **Strain Coaching** - Optimize training based on recovery status
+
+          ## 🚀 Visit the Full Site
+
+          **[whoopreferral.com](https://whoopreferral.com)** - Complete landing page with FAQ and details
+
+          ---
+
+          *This is a referral link for WHOOP's official program. When you sign up through this link, I receive a free month of WHOOP membership at no extra cost to you.*
+
+          Last updated: $(date +%Y-%m-%d)
+          EOF
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Commit changes
+        run: |
+          git add pages/* README.md
+          git commit -m "🚀 Update WHOOP referral site - $(date '+%Y-%m-%d %H:%M')" || echo "No changes to commit"
+          git push
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: pages
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
+          token: ${{ github.token }}

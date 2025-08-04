@@ -1,0 +1,30 @@
+{
+  "name": "whoop-referral-site",
+  "version": "1.0.0",
+  "description": "WHOOP referral landing page with automatic GitHub Pages deployment",
+  "main": "scripts/update-site.js",
+  "scripts": {
+    "build": "node scripts/update-site.js",
+    "dev": "npm run build && npx http-server pages -p 3000 -o",
+    "test": "node -e \"console.log('Testing site generation...'); require('./scripts/update-site.js')\""
+  },
+  "keywords": [
+    "whoop",
+    "referral", 
+    "fitness",
+    "health",
+    "tracker",
+    "github-pages"
+  ],
+  "author": "Yusuf Gürdoğan",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yusufgurdogan/whoop-referral.git"
+  },
+  "homepage": "https://whoopreferral.com"
+}
